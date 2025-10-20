@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { collection, getDocs, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { SearchFilters } from '../components/SearchFilters';
-
 import { PaymentDetailsModal } from '../components/PaymentDetailsModal';
 import { ExpiryManagementModal } from '../components/ExpiryManagementModal';
 import type { Payment } from '../types/Payment';
@@ -154,6 +153,14 @@ export function PaymentsPage() {
     return matchesSearch && matchesStatus;
   });
 
+  // Calculate status counts
+  const statusCounts = {
+    all: payments.length,
+    approved: payments.filter(p => p.status === 'approved').length,
+    pending: payments.filter(p => p.status === 'pending').length,
+    rejected: payments.filter(p => p.status === 'rejected').length
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -164,6 +171,55 @@ export function PaymentsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-white mb-2">Payment Management</h1>
+        <p className="text-gray-400">View and manage member payments</p>
+      </div>
+
+      {/* Status Filter Tabs */}
+      <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
+        <button
+          onClick={() => setStatusFilter('all')}
+          className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition ${
+            statusFilter === 'all'
+              ? 'bg-red-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+          }`}
+        >
+          All ({statusCounts.all})
+        </button>
+        <button
+          onClick={() => setStatusFilter('pending')}
+          className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition ${
+            statusFilter === 'pending'
+              ? 'bg-yellow-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+          }`}
+        >
+          Pending ({statusCounts.pending})
+        </button>
+        <button
+          onClick={() => setStatusFilter('approved')}
+          className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition ${
+            statusFilter === 'approved'
+              ? 'bg-green-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+          }`}
+        >
+          Approved ({statusCounts.approved})
+        </button>
+        <button
+          onClick={() => setStatusFilter('rejected')}
+          className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition ${
+            statusFilter === 'rejected'
+              ? 'bg-red-600 text-white'
+              : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+          }`}
+        >
+          Rejected ({statusCounts.rejected})
+        </button>
+      </div>
+
       <SearchFilters
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
