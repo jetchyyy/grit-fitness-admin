@@ -1,4 +1,4 @@
-import { LayoutDashboard, CreditCard, BarChart3, Users, Settings, Menu, X } from 'lucide-react';
+import {  CreditCard, BarChart3, Users, } from 'lucide-react';
 
 interface SidebarProps {
   currentPage: string;

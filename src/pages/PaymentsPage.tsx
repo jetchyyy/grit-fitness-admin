@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, getDocs, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { SearchFilters } from '../components/SearchFilters';
-import { PaymentRow } from '../components/PaymentRow';
+
 import { PaymentDetailsModal } from '../components/PaymentDetailsModal';
 import { ExpiryManagementModal } from '../components/ExpiryManagementModal';
 import type { Payment } from '../types/Payment';
